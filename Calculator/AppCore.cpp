@@ -76,52 +76,33 @@ std::vector<Token*> AppCore::Parse(std::string& str)
     if (str.empty())
         return parseVect;
 
-    int strSize = str.size();
     std::string tmp;
-    
+
     CharType lastType = Token::CheckCharType(str[0]);
     for (char ch : str)
     {
         CharType curType = Token::CheckCharType(ch);
-        if (curType == CharType::UNDEFINE || curType == CharType::SPACE)
-        {
-            tmp += ch;
-            continue;
-        }
 
-        if ((lastType == CharType::NUMBER || lastType == CharType::POINT) && (curType == CharType::NUMBER || curType == CharType::POINT))
+        if (curType == CharType::UNDEFINE || curType == CharType::SPACE || (lastType == CharType::NUMBER || lastType == CharType::POINT) && 
+            (curType == CharType::NUMBER || curType == CharType::POINT) || lastType == curType)
         {
             tmp += ch;
-            continue;
-        }
-
-        if (lastType == CharType::OPERATION || lastType == CharType::PARENTHESIS)
-        {
-            parseVect.push_back(new Token(tmp));
-            tmp.clear();
-            tmp += ch;
-            lastType = curType;
-            continue;
-        }
-
-        if (lastType == curType)
-        {
-            tmp += ch;
-            continue;
         }
         else
         {
             parseVect.push_back(new Token(tmp));
             tmp.clear();
             tmp += ch;
-            lastType = curType;
         }
+
+        lastType = curType;
     }
 
     parseVect.push_back(new Token(tmp));
 
     return parseVect;
 }
+
 
 
 
@@ -143,5 +124,10 @@ void AppCore::Start()
 
         for (auto n : parseVect)
             n->ConsolePrint();
+
+        for (Token* token : parseVect)
+            delete token;
+
+        parseVect.clear();
     }
 }
