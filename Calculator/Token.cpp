@@ -24,7 +24,7 @@ void Token::SetToken(const std::string& str)
     else if (startType == CharType::UNDEFINE)
     {
         token.clear();
-        type = TokenType::UNDEFINE;
+        type = TokenType::UNDEFINED;
         return;
     }
 
@@ -50,7 +50,7 @@ void Token::SetToken(const std::string& str)
             else
             {
                 token.clear();
-                type = TokenType::UNDEFINE;
+                type = TokenType::UNDEFINED;
                 return;
             }
         }
@@ -77,6 +77,11 @@ void Token::SetToken(const std::string& str)
 void Token::ConsolePrint()
 {
     std::cout << "Token = '" << token << "'; Type = '" << type << "';" << std::endl;
+}
+
+std::string Token::GetValue()
+{
+    return token;
 }
 
 CharType Token::CheckCharType(char c)
@@ -109,7 +114,7 @@ Token::Token(std::string token)
 	if (token.empty())
 	{
 		this->token = "";
-		type = TokenType::UNDEFINE;
+		type = TokenType::UNDEFINED;
 		return;
 	}
 

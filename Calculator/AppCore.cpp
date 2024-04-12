@@ -103,6 +103,129 @@ std::vector<Token*> AppCore::Parse(std::string& str)
     return parseVect;
 }
 
+void AppCore::RPN(std::vector<Token*>& vect)
+{
+    std::vector<Token*> tmpVect;
+    std::stack<Token*> stack;
+
+    for (auto token : vect)
+    {
+        switch (token->GetType())
+        {
+        case TokenType::NUMBER:
+        case TokenType::VARIABLE:
+            tmpVect.push_back(token);
+            break;
+
+        case TokenType::PARENTHESIS:
+            if (token->GetValue() == std::string("("))
+                stack.push(token);
+            else
+            {
+                while (!stack.empty() && stack.top()->GetType() != TokenType::PARENTHESIS)
+                {
+                    tmpVect.push_back(stack.top());
+                    stack.pop();
+                }
+                if(!stack.empty())
+                    stack.pop();
+            }
+            break;
+
+        case TokenType::OPERATION:
+            while (!stack.empty() && CheckPriority(stack.top()->GetValue()[0]) >= CheckPriority(token->GetValue()[0]) )
+            {
+                tmpVect.push_back(stack.top());
+                stack.pop();
+            }
+            stack.push(token);
+            break;
+
+        case TokenType::UNDEFINED:
+            break;
+        }
+    }
+
+    while (!stack.empty()) {
+        tmpVect.push_back(stack.top());
+        stack.pop();
+    }
+
+    vect.clear();
+    for (auto tmp : tmpVect)
+        vect.push_back(tmp);
+}
+
+
+bool AppCore::CheckValid(std::vector<Token*>& vect)
+{
+    int parenthesisOpen = 0; 
+    bool order = NUM_ORDER;
+     
+    for (auto token : vect)
+    {
+        switch (token->GetType())
+        {
+        case TokenType::PARENTHESIS:
+            if (token->GetValue() == std::string("("))
+                parenthesisOpen++;
+            else
+                parenthesisOpen--;
+            if (parenthesisOpen < 0)
+                return INVALID;
+            break;
+
+        case TokenType::NUMBER:
+        case TokenType::VARIABLE:
+            if (NUM_ORDER == order)
+                order = OPER_ORDER;
+            else
+                return INVALID;
+            break;
+
+        case TokenType::UNDEFINED:
+            break;
+
+        case TokenType::OPERATION:
+            if (OPER_ORDER == order)
+                order = NUM_ORDER;
+            else
+                return INVALID;
+            break;
+        }
+    }
+
+    if (order == NUM_ORDER)
+        return INVALID;
+
+    return VALID;
+}
+
+OperationPriority AppCore::CheckPriority(char c)
+{
+    switch (c)
+    {
+    case '+':
+        return OperationPriority::PLUS;
+
+    case '-':
+        return OperationPriority::MINUS;
+
+    case '*':
+        return OperationPriority::MULTIPLY;
+
+    case '/':
+        return OperationPriority::DIVIDE;
+
+    case '^':
+        return OperationPriority::DEGREE;
+
+    case '(':
+    case ')':
+        return OperationPriority::PARENTHESIS;
+    }
+}
+
 
 
 
@@ -118,12 +241,36 @@ void AppCore::Start()
 
         std::string str = GetString();
 
-        std::cout << "You enter:" << str << std::endl;
+        if(DEBUG)
+            std::cout << "You enter:" << str << std::endl;
 
         std::vector<Token*> parseVect = Parse(str);
 
-        for (auto n : parseVect)
-            n->ConsolePrint();
+        if(DEBUG)
+            for (auto n : parseVect)
+                n->ConsolePrint();
+
+        if (!CheckValid(parseVect))
+        {
+            std::cout << "Invalid mathematic expresion!" << std::endl;
+         
+            for (Token* token : parseVect)
+                delete token;
+
+            parseVect.clear();
+
+            continue;
+        }
+
+        RPN(parseVect);
+        
+        if (DEBUG)
+        {
+            for (auto n : parseVect)
+                std::cout << n->GetValue() << " ";
+                
+            std::cout << std::endl;
+        }
 
         for (Token* token : parseVect)
             delete token;
@@ -131,3 +278,4 @@ void AppCore::Start()
         parseVect.clear();
     }
 }
+//3 + 2 - ( 10 ^ 4) / 5

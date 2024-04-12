@@ -22,6 +22,9 @@ private:
     expressionType type;
     void GetExpressionType();
     std::vector<Token*> Parse(std::string& str);
+    void RPN(std::vector<Token*>& vect);
+    bool CheckValid(std::vector<Token*>& vect);
+    OperationPriority CheckPriority(char c);
 
 public:
     void Start();

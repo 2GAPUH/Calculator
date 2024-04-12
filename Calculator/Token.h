@@ -16,5 +16,6 @@ public:
 	~Token();
 	TokenType GetType();
 	void ConsolePrint();
+	std::string GetValue();
 };
 
