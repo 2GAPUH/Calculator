@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppCore.cpp" />
-    <ClCompile Include="CalculatedValue.cpp" />
     <ClCompile Include="FloatValue.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Token.cpp" />

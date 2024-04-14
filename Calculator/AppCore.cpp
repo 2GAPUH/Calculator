@@ -226,8 +226,10 @@ OperationPriority AppCore::CheckPriority(char c)
     }
 }
 
+void AppCore::Calc(std::vector<Token*>& vect)
+{
 
-
+}
 
 void AppCore::Start()
 {
@@ -271,6 +273,8 @@ void AppCore::Start()
                 
             std::cout << std::endl;
         }
+
+        
 
         for (Token* token : parseVect)
             delete token;

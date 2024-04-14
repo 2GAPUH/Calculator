@@ -25,6 +25,8 @@ private:
     void RPN(std::vector<Token*>& vect);
     bool CheckValid(std::vector<Token*>& vect);
     OperationPriority CheckPriority(char c);
+    void Calc(std::vector<Token*>& vect);
+
 
 public:
     void Start();

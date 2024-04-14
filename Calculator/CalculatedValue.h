@@ -3,6 +3,16 @@
 
 class CalculatedValue
 {
-public:
+protected:
+	virtual CalculatedValue* operator+(const CalculatedValue& other) const = 0;
+	virtual CalculatedValue* operator-(const CalculatedValue& other) const = 0;
+	virtual CalculatedValue* operator*(const CalculatedValue& other) const = 0;
+	virtual CalculatedValue* operator/(const CalculatedValue& other) const = 0;
+	virtual CalculatedValue* operator^(const CalculatedValue& other) const = 0;
+	virtual CalculatedValue* operator+(const float& other) const = 0;
+	virtual CalculatedValue* operator-(const float& other) const = 0;
+	virtual CalculatedValue* operator*(const float& other) const = 0;
+	virtual CalculatedValue* operator/(const float& other) const = 0;
+	virtual CalculatedValue* operator^(const float& other) const = 0;
 };
 

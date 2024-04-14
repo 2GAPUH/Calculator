@@ -21,9 +21,6 @@
     <ClCompile Include="AppCore.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="CalculatedValue.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="FloatValue.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
