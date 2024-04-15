@@ -19,7 +19,6 @@ public:
 
 private:
     std::string GetString();
-    expressionType type;
     void GetExpressionType();
     std::vector<Token*> Parse(std::string& str);
     void RPN(std::vector<Token*>& vect);

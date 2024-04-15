@@ -4,12 +4,13 @@
 #include <vector>
 #include <stack>
 
-enum class expressionType {FLOAT, MATRIX, COMPLEX };
+enum class ExpressionType {FLOAT, MATRIX, COMPLEX };
 
 enum class CharType { NUMBER, VARIABLE, OPERATION, PARENTHESIS, UNDEFINE, POINT, SPACE };
 enum class TokenType { NUMBER, VARIABLE, OPERATION, PARENTHESIS, UNDEFINED };
 enum class OperationPriority { PLUS = 0, MINUS = 0, MULTIPLY = 1, DIVIDE = 1, DEGREE = 1, PARENTHESIS = -1};
 
+ExpressionType expressionType = ExpressionType::FLOAT;
 
 static std::ostream& operator<<(std::ostream& os, const TokenType& color)
 {

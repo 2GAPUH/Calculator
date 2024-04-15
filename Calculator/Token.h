@@ -1,7 +1,7 @@
 #pragma once
 #include "DefineValue.h"
 
-
+class CalculatedValue;
 
 class Token
 {
@@ -9,6 +9,8 @@ private:
 	std::string token;
 	TokenType type;
 	void SetToken(const std::string& str);
+	void SetValue();
+	CalculatedValue* value = nullptr;
 
 public:
 	static CharType CheckCharType(char c);

@@ -19,10 +19,42 @@ FloatValue::FloatValue(Token* token)
 	}
 }
 
+FloatValue::FloatValue(float value)
+{
+    this->value = value;
+}
+
 CalculatedValue* FloatValue::operator+(const CalculatedValue& other) const
 {
     const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
     return new FloatValue(this->value + otherFloat.value);
 }
 
+CalculatedValue* FloatValue::operator-(const CalculatedValue& other) const
+{
+    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
+    return new FloatValue(this->value - otherFloat.value);
+}
 
+CalculatedValue* FloatValue::operator*(const CalculatedValue& other) const
+{
+    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
+    return new FloatValue(this->value * otherFloat.value);
+}
+
+CalculatedValue* FloatValue::operator/(const CalculatedValue& other) const
+{
+    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
+    if (otherFloat.value == 0)
+        throw std::invalid_argument("zero division!");
+    return new FloatValue(this->value / otherFloat.value);
+}
+
+CalculatedValue* FloatValue::operator^(const CalculatedValue& other) const
+{
+    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
+    if (std::abs(otherFloat.value) > std::log(std::numeric_limits<float>::max()) / std::log(value)) 
+        throw std::invalid_argument("Overflow!");
+    
+    return new FloatValue(pow(this->value, otherFloat.value));
+}

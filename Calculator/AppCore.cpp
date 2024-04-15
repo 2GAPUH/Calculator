@@ -49,15 +49,15 @@ void AppCore::GetExpressionType()
         switch (tmp)
         {
         case 0:
-            type = expressionType::FLOAT;
+            expressionType = ExpressionType::FLOAT;
             break;
 
         case 1:
-            type = expressionType::MATRIX;
+            expressionType = ExpressionType::MATRIX;
             break;
 
         case 2:
-            type = expressionType::COMPLEX;
+            expressionType = ExpressionType::COMPLEX;
             break;
         
         default:
@@ -228,6 +228,21 @@ OperationPriority AppCore::CheckPriority(char c)
 
 void AppCore::Calc(std::vector<Token*>& vect)
 {
+    std::stack<Token*> stack;
+    for (auto n : vect)
+    {
+        switch (n->GetType())
+        {
+        case TokenType::NUMBER:
+        case TokenType::VARIABLE:
+            stack.push(n);
+            break;
+        
+        case TokenType::OPERATION:
+            switch(n->GetValue())
+            break;
+        }
+    }
 
 }
 
@@ -274,7 +289,7 @@ void AppCore::Start()
             std::cout << std::endl;
         }
 
-        
+        Calc(parseVect);
 
         for (Token* token : parseVect)
             delete token;

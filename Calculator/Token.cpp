@@ -1,4 +1,6 @@
 #include "Token.h"
+#include "FloatValue.h"
+
 
 void Token::SetToken(const std::string& str)
 {
@@ -70,7 +72,23 @@ void Token::SetToken(const std::string& str)
         type = TokenType::VARIABLE;
         break;
     }
+}
 
+void Token::SetValue()
+{
+    if (type == TokenType::NUMBER)
+    {
+        value = new FloatValue(std::stof(token));
+        return;
+    }
+
+    if(type == TokenType::VARIABLE)
+    switch (expressionType)
+    {
+    case ExpressionType::FLOAT:
+        value = new FloatValue(this);
+        break;
+    }
 }
 
 
@@ -119,6 +137,7 @@ Token::Token(std::string token)
 	}
 
 	SetToken(token);
+    SetValue();
 }
 
 Token::~Token()

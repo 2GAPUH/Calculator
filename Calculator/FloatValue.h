@@ -10,15 +10,11 @@ private:
 
 public:
 	FloatValue(Token* token);
+	FloatValue(float value);
 	CalculatedValue* operator+(const CalculatedValue& other) const override;
 	CalculatedValue* operator-(const CalculatedValue& other) const override;
 	CalculatedValue* operator*(const CalculatedValue& other) const override;
 	CalculatedValue* operator/(const CalculatedValue& other) const override;
 	CalculatedValue* operator^(const CalculatedValue& other) const override;
-	CalculatedValue* operator+(const float& other) const override;
-	CalculatedValue* operator-(const float& other) const override;
-	CalculatedValue* operator*(const float& other) const override;
-	CalculatedValue* operator/(const float& other) const override;
-	CalculatedValue* operator^(const float& other) const override;
 };
 
