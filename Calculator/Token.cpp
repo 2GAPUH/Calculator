@@ -1,7 +1,6 @@
 #include "Token.h"
 #include "FloatValue.h"
 
-
 void Token::SetToken(const std::string& str)
 {
     const int size = str.size();
@@ -78,7 +77,7 @@ void Token::SetValue()
 {
     if (type == TokenType::NUMBER)
     {
-        value = new FloatValue(std::stof(token));
+        calcValue = new FloatValue(std::stof(token));
         return;
     }
 
@@ -86,11 +85,10 @@ void Token::SetValue()
     switch (expressionType)
     {
     case ExpressionType::FLOAT:
-        value = new FloatValue(this);
+        calcValue = new FloatValue(this);
         break;
     }
 }
-
 
 void Token::ConsolePrint()
 {
@@ -100,6 +98,11 @@ void Token::ConsolePrint()
 std::string Token::GetValue()
 {
     return token;
+}
+
+CalculatedValue*& Token::GetCalcValue()
+{
+    return calcValue;
 }
 
 CharType Token::CheckCharType(char c)

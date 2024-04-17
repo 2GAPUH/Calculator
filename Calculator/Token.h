@@ -10,7 +10,7 @@ private:
 	TokenType type;
 	void SetToken(const std::string& str);
 	void SetValue();
-	CalculatedValue* value = nullptr;
+	CalculatedValue* calcValue = nullptr;
 
 public:
 	static CharType CheckCharType(char c);
@@ -19,5 +19,6 @@ public:
 	TokenType GetType();
 	void ConsolePrint();
 	std::string GetValue();
+	CalculatedValue*& GetCalcValue();
 };
 

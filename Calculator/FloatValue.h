@@ -16,5 +16,6 @@ public:
 	CalculatedValue* operator*(const CalculatedValue& other) const override;
 	CalculatedValue* operator/(const CalculatedValue& other) const override;
 	CalculatedValue* operator^(const CalculatedValue& other) const override;
+	ExpressionType GetExpressionType() const override;
 };
 

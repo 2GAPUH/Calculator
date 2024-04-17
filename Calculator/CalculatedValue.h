@@ -9,5 +9,6 @@ protected:
 	virtual CalculatedValue* operator*(const CalculatedValue& other) const = 0;
 	virtual CalculatedValue* operator/(const CalculatedValue& other) const = 0;
 	virtual CalculatedValue* operator^(const CalculatedValue& other) const = 0;
+	virtual ExpressionType GetExpressionType() const = 0;
 };
 

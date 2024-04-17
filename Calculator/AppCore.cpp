@@ -239,7 +239,26 @@ void AppCore::Calc(std::vector<Token*>& vect)
             break;
         
         case TokenType::OPERATION:
-            switch(n->GetValue())
+            Token* tmp = stack.top();
+            stack.pop();
+            switch (n->GetValue()[0])
+            {
+            case '+':
+                *(stack.top()->GetCalcValue()) = *(stack.top()->GetCalcValue()) + *(tmp->GetCalcValue());
+                break;
+
+            case '-':
+                break;
+
+            case '*':
+                break;
+
+            case '/':
+                break;
+
+            case '^':
+                break;
+            }
             break;
         }
     }

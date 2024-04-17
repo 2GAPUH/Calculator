@@ -58,3 +58,8 @@ CalculatedValue* FloatValue::operator^(const CalculatedValue& other) const
     
     return new FloatValue(pow(this->value, otherFloat.value));
 }
+
+ExpressionType FloatValue::GetExpressionType() const
+{
+    return ExpressionType::FLOAT;
+}
