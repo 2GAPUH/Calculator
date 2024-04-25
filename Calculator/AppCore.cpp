@@ -1,5 +1,7 @@
 #include "AppCore.h"
 #include "Token.h"
+#include "Calculator.h"
+#include "CalculatedValue.h"
 
 AppCore* AppCore::instance = nullptr;
 
@@ -239,26 +241,42 @@ void AppCore::Calc(std::vector<Token*>& vect)
             break;
         
         case TokenType::OPERATION:
-            Token* tmp = stack.top();
+            CalculatedValue* tmp = nullptr;
+            Token* var2 = stack.top();
             stack.pop();
-            switch (n->GetValue()[0])
+
+            try
             {
-            case '+':
-                *(stack.top()->GetCalcValue()) = *(stack.top()->GetCalcValue()) + *(tmp->GetCalcValue());
-                break;
+                switch (n->GetValue()[0])
+                {
+                case '+':
+                    tmp = Calculator::add(stack.top()->GetCalcValue(), var2->GetCalcValue());
+                    break;
 
-            case '-':
-                break;
+                case '-':
+                    tmp = Calculator::substract(stack.top()->GetCalcValue(), var2->GetCalcValue());
+                    break;
 
-            case '*':
-                break;
+                case '*':
+                    tmp = Calculator::multiply(stack.top()->GetCalcValue(), var2->GetCalcValue());
+                    break;
 
-            case '/':
-                break;
+                case '/':
+                    tmp = Calculator::devide(stack.top()->GetCalcValue(), var2->GetCalcValue());
+                    break;
 
-            case '^':
-                break;
+                case '^':
+                    tmp = Calculator::power(stack.top()->GetCalcValue(), var2->GetCalcValue());
+                    break;
+                }
             }
+            catch (const ErrorsType error)
+            {
+                std::cout << error << std::endl;
+                return;
+            }
+
+            stack.top()->SetCalcValue(tmp);
             break;
         }
     }

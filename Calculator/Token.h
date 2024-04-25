@@ -20,5 +20,6 @@ public:
 	void ConsolePrint();
 	std::string GetValue();
 	CalculatedValue*& GetCalcValue();
+	void SetCalcValue(CalculatedValue* calcValue);
 };
 

@@ -3,12 +3,13 @@
 
 class CalculatedValue
 {
-protected:
-	virtual CalculatedValue* operator+(const CalculatedValue& other) const = 0;
-	virtual CalculatedValue* operator-(const CalculatedValue& other) const = 0;
-	virtual CalculatedValue* operator*(const CalculatedValue& other) const = 0;
-	virtual CalculatedValue* operator/(const CalculatedValue& other) const = 0;
-	virtual CalculatedValue* operator^(const CalculatedValue& other) const = 0;
-	virtual ExpressionType GetExpressionType() const = 0;
+public:
+    virtual CalculatedValue* operator+(CalculatedValue*& other) const = 0;
+    virtual CalculatedValue* operator-(CalculatedValue*& other) const = 0;
+    virtual CalculatedValue* operator*(CalculatedValue*& other) const = 0;
+    virtual CalculatedValue* operator/(CalculatedValue*& other) const = 0;
+    virtual CalculatedValue* operator^(CalculatedValue*& other) const = 0;
+    virtual CalculatedValue* operator-() const = 0;
+    virtual ExpressionType GetType() const = 0;
+    virtual std::ostream& ConsolePrint(std::ostream& os) const = 0;
 };
-

@@ -1,5 +1,7 @@
 #include "Token.h"
 #include "FloatValue.h"
+#include "CalculatedValue.h"
+#include "MatrixValue.h"
 
 void Token::SetToken(const std::string& str)
 {
@@ -85,7 +87,11 @@ void Token::SetValue()
     switch (expressionType)
     {
     case ExpressionType::FLOAT:
-        calcValue = new FloatValue(this);
+        calcValue = new FloatValue(token);
+        break;
+
+    case ExpressionType::MATRIX:
+        calcValue = new MatrixValue(token);
         break;
     }
 }
@@ -103,6 +109,13 @@ std::string Token::GetValue()
 CalculatedValue*& Token::GetCalcValue()
 {
     return calcValue;
+}
+
+void Token::SetCalcValue(CalculatedValue* calcValue)
+{
+    if (this->calcValue != nullptr)
+        delete this->calcValue;
+    this->calcValue = calcValue;
 }
 
 CharType Token::CheckCharType(char c)

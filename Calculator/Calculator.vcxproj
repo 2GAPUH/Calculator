@@ -128,15 +128,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppCore.cpp" />
+    <ClCompile Include="Calculator.cpp" />
     <ClCompile Include="FloatValue.cpp" />
+    <ClCompile Include="MatrixValue.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Token.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppCore.h" />
     <ClInclude Include="CalculatedValue.h" />
+    <ClInclude Include="Calculator.h" />
     <ClInclude Include="DefineValue.h" />
     <ClInclude Include="FloatValue.h" />
+    <ClInclude Include="MatrixValue.h" />
     <ClInclude Include="Token.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

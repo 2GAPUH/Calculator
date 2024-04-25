@@ -1,17 +1,15 @@
 #pragma once
 #include "CalculatedValue.h"
 
-class Token;
-
-class FloatValue : public CalculatedValue
+class MatrixValue : public CalculatedValue
 {
-private:
-    float value = 0.f;
+	float** value = nullptr;
+    int rows = 0, columns = 0;
 
 public:
-    FloatValue(std::string str);
-    FloatValue(Token  token);
-    FloatValue(float i = 0);
+    MatrixValue(std::string str);
+    MatrixValue(float** matr, int rows, int columns);
+    ~MatrixValue();
 
     CalculatedValue* operator+(CalculatedValue*& other) const override;
     CalculatedValue* operator-(CalculatedValue*& other) const override;
@@ -20,8 +18,6 @@ public:
     CalculatedValue* operator^(CalculatedValue*& other) const override;
     CalculatedValue* operator-() const override;
     ExpressionType GetType() const override;
-    float GetValue();
-
     std::ostream& operator<<(std::ostream& os) const override;
 };
 

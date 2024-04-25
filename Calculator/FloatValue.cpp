@@ -1,65 +1,92 @@
 #include "FloatValue.h"
+#include "Token.h"  
 
-FloatValue::FloatValue(Token* token)
+FloatValue::FloatValue(std::string str)
 {
-    bool flag = true;
+    bool validInput = false;
+    while (!validInput) 
+    {
+        std::cout << "Enter " << str << " value: ";
+        std::string input;
+        std::cin >> input;
 
-	while (flag)
-	{
-        flag = false;
-		std::cout << "Enter " << token->GetValue() << " value: ";
-		std::cin >> value;
-
-        if (std::cin.fail()) {
-            std::cin.clear(); // Очищаем флаг ошибки
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Очищаем буфер ввода
-            std::cout << "Invalid input. Please enter a valid float value." << std::endl;
-            flag = true;
+        try 
+        {
+            value = std::stof(input);
+            validInput = true;
         }
-	}
+        catch (const std::invalid_argument& e) {
+            std::cerr << "Invalid input. Please enter a valid float value." << std::endl;
+        }
+        catch (const std::out_of_range& e) {
+            std::cerr << "Input out of range. Please enter a valid float value." << std::endl;
+        }
+        
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
 }
 
-FloatValue::FloatValue(float value)
+FloatValue::FloatValue(Token token)
 {
-    this->value = value;
+    value = stof(token.GetValue());
 }
 
-CalculatedValue* FloatValue::operator+(const CalculatedValue& other) const
+FloatValue::FloatValue(float i) : value(i) {}
+
+CalculatedValue* FloatValue::operator+(CalculatedValue*& other) const
 {
-    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
-    return new FloatValue(this->value + otherFloat.value);
+    FloatValue* tmp = dynamic_cast<FloatValue*>(other);
+    return new FloatValue(value + tmp->value);
 }
 
-CalculatedValue* FloatValue::operator-(const CalculatedValue& other) const
+CalculatedValue* FloatValue::operator-(CalculatedValue*& other) const
 {
-    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
-    return new FloatValue(this->value - otherFloat.value);
+    FloatValue* tmp = dynamic_cast<FloatValue*>(other);
+    return new FloatValue(value - tmp->value);
 }
 
-CalculatedValue* FloatValue::operator*(const CalculatedValue& other) const
+CalculatedValue* FloatValue::operator*(CalculatedValue*& other) const
 {
-    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
-    return new FloatValue(this->value * otherFloat.value);
+    FloatValue* tmp = dynamic_cast<FloatValue*>(other);
+    return new FloatValue(value * tmp->value);
 }
 
-CalculatedValue* FloatValue::operator/(const CalculatedValue& other) const
+CalculatedValue* FloatValue::operator/(CalculatedValue*& other) const
 {
-    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
-    if (otherFloat.value == 0)
-        throw std::invalid_argument("zero division!");
-    return new FloatValue(this->value / otherFloat.value);
+    FloatValue* tmp = dynamic_cast<FloatValue*>(other);
+    if (tmp->value == 0)
+        throw(ErrorsType::ZERO_DEVIDE);
+    return new FloatValue(value / tmp->value);
 }
 
-CalculatedValue* FloatValue::operator^(const CalculatedValue& other) const
+CalculatedValue* FloatValue::operator^(CalculatedValue*& other) const
 {
-    const FloatValue& otherFloat = dynamic_cast<const FloatValue&>(other);
-    if (std::abs(otherFloat.value) > std::log(std::numeric_limits<float>::max()) / std::log(value)) 
-        throw std::invalid_argument("Overflow!");
+    FloatValue* tmp = dynamic_cast<FloatValue*>(other);
+    float result = std::pow(value, tmp->value);
+    if (std::isnan(result)) 
+        throw(ErrorsType::POWER_OVERFLOW);
     
-    return new FloatValue(pow(this->value, otherFloat.value));
+    return new FloatValue(result);
 }
 
-ExpressionType FloatValue::GetExpressionType() const
+CalculatedValue* FloatValue::operator-() const
+{
+    return nullptr; 
+}
+
+ExpressionType FloatValue::GetType() const
 {
     return ExpressionType::FLOAT;
+}
+
+float FloatValue::GetValue()
+{
+    return value;
+}
+
+std::ostream& FloatValue::operator<<(std::ostream& os) const
+{
+    os << value;
+    return os;
 }
