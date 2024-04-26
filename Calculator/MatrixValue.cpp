@@ -6,16 +6,14 @@ ExpressionType MatrixValue::GetType() const
     return ExpressionType::MATRIX;
 }
 
-std::ostream& MatrixValue::operator<<(std::ostream& os) const
+void MatrixValue::ConsolePrint() const
 {
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < columns; j++)
-            os << value[i][j] << "  ";
-        os << std::endl;
+            std::cout << value[i][j] << " ";
+        std::cout << std::endl;
     }
-
-    return os;
 }
 
 MatrixValue::MatrixValue(std::string str)
@@ -256,7 +254,15 @@ CalculatedValue* MatrixValue::operator^(CalculatedValue*& other) const
 
 CalculatedValue* MatrixValue::operator-() const
 {
-    return nullptr;
+    float** result = new float* [rows];
+    for (int i = 0; i < rows; i++)
+        result[i] = new float[columns];
+
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < columns; j++)
+            result[i][j] = -value[i][j];
+
+    return new MatrixValue(result, rows, columns);
 }
 
 /*

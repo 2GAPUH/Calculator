@@ -23,7 +23,7 @@ CalculatedValue* Calculator::substract(CalculatedValue* a, CalculatedValue* b)
         if (b->GetType() == ExpressionType::FLOAT)
             return *a - b;
         else
-            return *b - a; 
+            return -*(*b - a);
     }
     else if (a->GetType() == ExpressionType::MATRIX || a->GetType() == ExpressionType::COMPLEX)
     {
@@ -68,7 +68,7 @@ CalculatedValue* Calculator::power(CalculatedValue* a, CalculatedValue* b)
         if (b->GetType() == ExpressionType::FLOAT)
             return *a ^ b;
         else
-            return *b ^ a; 
+            throw(ErrorsType::FLOAT_POWER_UNDEFINE);
     }
     else if (a->GetType() == ExpressionType::MATRIX || a->GetType() == ExpressionType::COMPLEX)
     {

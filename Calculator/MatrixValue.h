@@ -18,6 +18,6 @@ public:
     CalculatedValue* operator^(CalculatedValue*& other) const override;
     CalculatedValue* operator-() const override;
     ExpressionType GetType() const override;
-    std::ostream& operator<<(std::ostream& os) const override;
+    void ConsolePrint() const override;
 };
 

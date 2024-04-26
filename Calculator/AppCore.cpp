@@ -281,6 +281,8 @@ void AppCore::Calc(std::vector<Token*>& vect)
         }
     }
 
+    std::cout << "Expression value:";
+    stack.top()->GetCalcValue()->ConsolePrint();
 }
 
 void AppCore::Start()

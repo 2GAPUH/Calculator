@@ -21,7 +21,6 @@ public:
     CalculatedValue* operator-() const override;
     ExpressionType GetType() const override;
     float GetValue();
-
-    std::ostream& operator<<(std::ostream& os) const override;
+    void ConsolePrint() const override;
 };
 

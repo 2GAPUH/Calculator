@@ -62,8 +62,11 @@ CalculatedValue* FloatValue::operator/(CalculatedValue*& other) const
 
 CalculatedValue* FloatValue::operator^(CalculatedValue*& other) const
 {
-    FloatValue* tmp = dynamic_cast<FloatValue*>(other);
-    float result = std::pow(value, tmp->value);
+    float tmp = dynamic_cast<FloatValue*>(other)->GetValue();
+    tmp = std::round(tmp);
+    tmp = std::abs(tmp);
+
+    float result = std::pow(value, tmp);
     if (std::isnan(result)) 
         throw(ErrorsType::POWER_OVERFLOW);
     
@@ -72,7 +75,7 @@ CalculatedValue* FloatValue::operator^(CalculatedValue*& other) const
 
 CalculatedValue* FloatValue::operator-() const
 {
-    return nullptr; 
+    return new FloatValue(-value); 
 }
 
 ExpressionType FloatValue::GetType() const
@@ -85,8 +88,7 @@ float FloatValue::GetValue()
     return value;
 }
 
-std::ostream& FloatValue::operator<<(std::ostream& os) const
+void FloatValue::ConsolePrint() const
 {
-    os << value;
-    return os;
+    std::cout << value;
 }

@@ -9,11 +9,12 @@ enum class ExpressionType {FLOAT, MATRIX, COMPLEX };
 
 enum class CharType { NUMBER, VARIABLE, OPERATION, PARENTHESIS, UNDEFINE, POINT, SPACE };
 enum class TokenType { NUMBER, VARIABLE, OPERATION, PARENTHESIS, UNDEFINED };
-enum class OperationPriority { PLUS = 0, MINUS = 0, MULTIPLY = 1, DIVIDE = 1, DEGREE = 1, PARENTHESIS = -1};
+enum class OperationPriority { PLUS = 0, MINUS = 0, MULTIPLY = 1, DIVIDE = 1, DEGREE = 2, PARENTHESIS = -1};
 
 static ExpressionType expressionType = ExpressionType::FLOAT;
 
-enum class ErrorsType {ZERO_DEVIDE, POWER_OVERFLOW, INCOMPATIBLE_MATRIX_SIZES, MATRIX_DIVIDE_MATRIX, MATRIX_POWER_MATRIX};
+enum class ErrorsType {ZERO_DEVIDE, POWER_OVERFLOW, INCOMPATIBLE_MATRIX_SIZES, MATRIX_DIVIDE_MATRIX, 
+    MATRIX_POWER_MATRIX, FLOAT_POWER_UNDEFINE};
 
 static std::ostream& operator<<(std::ostream& os, ErrorsType error) 
 {
@@ -33,6 +34,10 @@ static std::ostream& operator<<(std::ostream& os, ErrorsType error)
     case ErrorsType::MATRIX_POWER_MATRIX:
         os << "Matrix Power Matrix";
         break;
+    case ErrorsType::FLOAT_POWER_UNDEFINE:
+        os << "A float can only be raised to the float degree";
+        break;
+
     default:
         os << "Unknown Error";
         break;
