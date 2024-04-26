@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="AppCore.cpp" />
     <ClCompile Include="Calculator.cpp" />
+    <ClCompile Include="ComplexValue.cpp" />
     <ClCompile Include="FloatValue.cpp" />
     <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="MatrixValue.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="AppCore.h" />
     <ClInclude Include="CalculatedValue.h" />
     <ClInclude Include="Calculator.h" />
+    <ClInclude Include="ComplexValue.h" />
     <ClInclude Include="DefineValue.h" />
     <ClInclude Include="FloatValue.h" />
     <ClInclude Include="json-forwards.h" />

@@ -2,6 +2,7 @@
 #include "FloatValue.h"
 #include "CalculatedValue.h"
 #include "MatrixValue.h"
+#include "ComplexValue.h"
 
 static ExpressionType expressionType;
 
@@ -94,6 +95,10 @@ void Token::SetValue()
 
     case ExpressionType::MATRIX:
         calcValue = new MatrixValue(token);
+        break;
+    
+    case ExpressionType::COMPLEX:
+        calcValue = new ComplexValue(token);
         break;
     }
 }
