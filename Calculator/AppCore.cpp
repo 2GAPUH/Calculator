@@ -37,35 +37,45 @@ std::string AppCore::GetString()
 void AppCore::GetExpressionType()
 {
     std::string str1 = "0 - Float \n1 - Matrix \n2 - Complex \nEnter expression type: ";
-    std::string str2 = "Invaid type!";
-    int tmp = -1;
+    std::string str2 = "Invalid type!";
     bool flag = true;
 
-    while (flag)
+    while (flag) 
     {
         std::cout << str1;
 
-        std::cin >> tmp;
-        flag = false;
+        try {
+            int tmp;
+            std::cin >> tmp;
+            if (std::cin.fail())
+                throw(ErrorsType::TRASH_INPUT);
 
-        switch (tmp)
-        {
-        case 0:
-            expressionType = ExpressionType::FLOAT;
-            break;
+            switch (tmp) {
+            case 0:
+                Token::SetExpressionType(ExpressionType::FLOAT);
+                flag = false;
+                break;
 
-        case 1:
-            expressionType = ExpressionType::MATRIX;
-            break;
+            case 1:
+                Token::SetExpressionType(ExpressionType::MATRIX);
+                flag = false;
+                break;
 
-        case 2:
-            expressionType = ExpressionType::COMPLEX;
-            break;
-        
-        default:
-            flag = true;
-            std::cout << str2 << std::endl;
-            break;
+            case 2:
+                Token::SetExpressionType(ExpressionType::COMPLEX);
+                flag = false;
+                break;
+
+            default:
+                throw(ErrorsType::INVALID_TYPE);
+                break;
+            }
+        }
+        catch (const ErrorsType error) {
+            std::cout << error;
+
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 
@@ -281,7 +291,7 @@ void AppCore::Calc(std::vector<Token*>& vect)
         }
     }
 
-    std::cout << "Expression value:";
+    std::cout << "Expression value:\n";
     stack.top()->GetCalcValue()->ConsolePrint();
 }
 

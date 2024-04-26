@@ -21,5 +21,6 @@ public:
 	std::string GetValue();
 	CalculatedValue*& GetCalcValue();
 	void SetCalcValue(CalculatedValue* calcValue);
+	static void SetExpressionType(ExpressionType expressionType);
 };
 

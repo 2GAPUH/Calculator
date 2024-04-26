@@ -5,6 +5,7 @@ class MatrixValue : public CalculatedValue
 {
 	float** value = nullptr;
     int rows = 0, columns = 0;
+    float** CreateMatrix(int rows, int columns);
 
 public:
     MatrixValue(std::string str);

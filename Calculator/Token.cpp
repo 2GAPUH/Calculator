@@ -3,6 +3,8 @@
 #include "CalculatedValue.h"
 #include "MatrixValue.h"
 
+static ExpressionType expressionType;
+
 void Token::SetToken(const std::string& str)
 {
     const int size = str.size();
@@ -116,6 +118,11 @@ void Token::SetCalcValue(CalculatedValue* calcValue)
     if (this->calcValue != nullptr)
         delete this->calcValue;
     this->calcValue = calcValue;
+}
+
+void Token::SetExpressionType(ExpressionType expressionType)
+{
+    ::expressionType = expressionType;
 }
 
 CharType Token::CheckCharType(char c)

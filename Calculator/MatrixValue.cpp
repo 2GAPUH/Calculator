@@ -178,7 +178,11 @@ CalculatedValue* MatrixValue::operator*(CalculatedValue*& other) const
                 for (int k = 0; k < columns; k++) 
                     result[i][j] += value[i][k] * tmp->value[k][j];
 
-        return new MatrixValue(result, rows, tmp->columns);
+        MatrixValue * tmp3 = new MatrixValue(result, rows, tmp->columns);
+        for (int i = 0; i < rows; i++)
+            delete result[i];
+        delete result;
+        return tmp3;
     }
 }
 
@@ -215,9 +219,9 @@ CalculatedValue* MatrixValue::operator^(CalculatedValue*& other) const
         tmp = std::round(tmp);
         tmp = std::abs(tmp);
 
-        float** result = new float* [rows];
+        float** tmpResult = new float* [rows];
         for (int i = 0; i < rows; i++)
-            result[i] = new float[columns];
+            tmpResult[i] = new float[columns];
 
         if (tmp == 0)
         {
@@ -225,26 +229,61 @@ CalculatedValue* MatrixValue::operator^(CalculatedValue*& other) const
                 for (int j = 0; j < columns; j++)
                 {
                     if (i == j)
-                        result[i][j] = 1;
+                        tmpResult[i][j] = 1;
                     else
-                        result[i][j] = 0;
+                        tmpResult[i][j] = 0;
                 }
-            return new MatrixValue(result, rows, columns);
-        }
-        else
+
+            MatrixValue* tmp3 = new MatrixValue(tmpResult, rows, columns);
+            
             for (int i = 0; i < rows; i++)
-                for (int j = 0; j < columns; j++)
-                     result[i][j] = value[i][j];
+                delete tmpResult[i];
+            delete tmpResult;
+            
+            return tmp3;
+        }
+        
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++)
+                tmpResult[i][j] = value[i][j];
+
+        float** result = new float* [rows];
+        for (int i = 0; i < rows; i++)
+            result[i] = new float[columns];
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < columns; j++)
+                result[i][j] = 0;
 
         while(curDegree < tmp)
         {
             for (int i = 0; i < rows; i++)
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < rows; j++)
                     for (int k = 0; k < columns; k++)
-                        result[i][j] += value[i][k] * value[k][j];
+                        result[i][j] += tmpResult[i][k] * value[k][j];
+            curDegree++;
+
+            if(curDegree < tmp)
+            {
+                for (int i = 0; i < rows; i++)
+                    for (int j = 0; j < columns; j++)
+                    {
+                        tmpResult[i][j] = result[i][j];
+                        result[i][j] = 0;
+                    }
+            }
         }
 
-        return new MatrixValue(result, rows, columns);
+        MatrixValue* tmp3 = new MatrixValue(result, rows, columns);
+
+        for (int i = 0; i < rows; i++)
+        {
+            delete tmpResult[i];
+            delete result[i];
+        }
+        delete tmpResult;
+        delete result;
+
+        return tmp3;
     }
     else if (other->GetType() == ExpressionType::MATRIX)
     {
@@ -262,7 +301,12 @@ CalculatedValue* MatrixValue::operator-() const
         for (int j = 0; j < columns; j++)
             result[i][j] = -value[i][j];
 
-    return new MatrixValue(result, rows, columns);
+    MatrixValue* tmp3 = new MatrixValue(result, rows, columns);
+    for (int i = 0; i < rows; i++)
+        delete result[i];
+    delete result;
+
+    return tmp3;
 }
 
 /*

@@ -4,6 +4,8 @@
 #include <vector>
 #include <stack>
 #include <sstream>
+#include <json/json.h>
+#include <fstream>
 
 enum class ExpressionType {FLOAT, MATRIX, COMPLEX };
 
@@ -11,13 +13,12 @@ enum class CharType { NUMBER, VARIABLE, OPERATION, PARENTHESIS, UNDEFINE, POINT,
 enum class TokenType { NUMBER, VARIABLE, OPERATION, PARENTHESIS, UNDEFINED };
 enum class OperationPriority { PLUS = 0, MINUS = 0, MULTIPLY = 1, DIVIDE = 1, DEGREE = 2, PARENTHESIS = -1};
 
-static ExpressionType expressionType = ExpressionType::FLOAT;
-
 enum class ErrorsType {ZERO_DEVIDE, POWER_OVERFLOW, INCOMPATIBLE_MATRIX_SIZES, MATRIX_DIVIDE_MATRIX, 
-    MATRIX_POWER_MATRIX, FLOAT_POWER_UNDEFINE};
+    MATRIX_POWER_MATRIX, FLOAT_POWER_UNDEFINE, TRASH_INPUT, INVALID_TYPE};
 
 static std::ostream& operator<<(std::ostream& os, ErrorsType error) 
 {
+    os << "ERROR! ";
     switch (error) {
     case ErrorsType::ZERO_DEVIDE:
         os << "Zero Divide";
@@ -37,11 +38,20 @@ static std::ostream& operator<<(std::ostream& os, ErrorsType error)
     case ErrorsType::FLOAT_POWER_UNDEFINE:
         os << "A float can only be raised to the float degree";
         break;
+    case ErrorsType::TRASH_INPUT:
+        os << "Enter ONLY int num";
+        break;
+    case ErrorsType::INVALID_TYPE:
+        os << "Invalid type. Try again";
+        break;
+
 
     default:
         os << "Unknown Error";
         break;
     }
+
+    os << std::endl;
     return os;
 }
 
