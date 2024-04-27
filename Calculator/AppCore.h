@@ -20,7 +20,7 @@ public:
 private:
     std::string GetString();
     void GetExpressionType();
-    JsonContents ReadFromJson(std::string path = "data.json");
+    JsonContent ReadFromJson(std::string path = "data.json");
     void GetMode();
     void JsonMode();
     void ConsoleMode();

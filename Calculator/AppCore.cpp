@@ -81,9 +81,9 @@ void AppCore::GetExpressionType()
 
 }
 
-JsonContents AppCore::ReadFromJson(std::string path)
+JsonContent AppCore::ReadFromJson(std::string path)
 {
-    JsonContents content;
+    JsonContent content;
 
     std::ifstream file("data.json");
     
@@ -162,8 +162,8 @@ void AppCore::GetMode()
 
 void AppCore::JsonMode()
 {
-    JsonContents content = ReadFromJson();
-    
+    JsonContent content = ReadFromJson();
+
     Calculator::DataProcessing(content.str);
 
     system("pause");

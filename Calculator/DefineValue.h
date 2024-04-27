@@ -19,7 +19,7 @@ enum class ErrorsType {ZERO_DEVIDE, POWER_OVERFLOW, INCOMPATIBLE_MATRIX_SIZES, M
 
 enum class ProgramMode { CONSOLE, JSON};
 
-struct JsonContents
+struct JsonContent
 {
     std::string str;
     Json::Value variables;

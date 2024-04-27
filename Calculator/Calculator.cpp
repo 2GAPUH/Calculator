@@ -36,6 +36,8 @@ std::vector<Token*> Calculator::Parse(std::string& str)
     return parseVect;
 }
 
+
+
 bool Calculator::CheckValid(std::vector<Token*> vect)
 {
     int parenthesisOpen = 0;
