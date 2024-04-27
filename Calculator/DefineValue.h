@@ -14,7 +14,16 @@ enum class TokenType { NUMBER, VARIABLE, OPERATION, PARENTHESIS, UNDEFINED };
 enum class OperationPriority { PLUS = 0, MINUS = 0, MULTIPLY = 1, DIVIDE = 1, DEGREE = 2, PARENTHESIS = -1};
 
 enum class ErrorsType {ZERO_DEVIDE, POWER_OVERFLOW, INCOMPATIBLE_MATRIX_SIZES, MATRIX_DIVIDE_MATRIX, 
-    MATRIX_POWER_MATRIX, FLOAT_POWER_UNDEFINE, TRASH_INPUT, INVALID_TYPE, COMPLEX_POWER_COMPLEX};
+    MATRIX_POWER_MATRIX, FLOAT_POWER_UNDEFINE, TRASH_INPUT, INVALID_TYPE, COMPLEX_POWER_COMPLEX, JSON_FILE_CANT_OPEN,
+    JSON_PARCING_ERROR, INVALID_JSON_MODE};
+
+enum class ProgramMode { CONSOLE, JSON};
+
+struct JsonContents
+{
+    std::string str;
+    Json::Value variables;
+};
 
 static std::ostream& operator<<(std::ostream& os, ErrorsType error) 
 {
@@ -46,6 +55,15 @@ static std::ostream& operator<<(std::ostream& os, ErrorsType error)
         break;
     case ErrorsType::COMPLEX_POWER_COMPLEX:
         os << "Complex power complex";
+        break;
+    case ErrorsType::JSON_FILE_CANT_OPEN:
+        os << "Opening json file";
+        break;
+    case ErrorsType::JSON_PARCING_ERROR:
+        os << "Json parcing";
+        break;
+    case ErrorsType::INVALID_JSON_MODE:
+        os << "Json invalid expression mode";
         break;
 
 

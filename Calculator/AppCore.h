@@ -20,12 +20,11 @@ public:
 private:
     std::string GetString();
     void GetExpressionType();
-    std::vector<Token*> Parse(std::string& str);
-    void RPN(std::vector<Token*>& vect);
-    bool CheckValid(std::vector<Token*>& vect);
-    OperationPriority CheckPriority(char c);
-    void Calc(std::vector<Token*>& vect);
-
+    JsonContents ReadFromJson(std::string path = "data.json");
+    void GetMode();
+    void JsonMode();
+    void ConsoleMode();
+    ProgramMode programMode;
 
 public:
     void Start();

@@ -1,5 +1,12 @@
 {
-  "name": "John",
-  "age": 30,
-  "is_student": false
+  "mode": "float",
+  "expression": "a + b - 12 * 4 ^ 3",
+  "variables": [
+    {
+      "a" : "1.32"
+    },
+    {
+      "b" : "2.6"
+    }
+  ]
 }

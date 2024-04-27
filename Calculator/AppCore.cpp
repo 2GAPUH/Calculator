@@ -81,221 +81,95 @@ void AppCore::GetExpressionType()
 
 }
 
-std::vector<Token*> AppCore::Parse(std::string& str)
+JsonContents AppCore::ReadFromJson(std::string path)
 {
-    std::vector<Token*> parseVect;
+    JsonContents content;
 
-    if (str.empty())
-        return parseVect;
+    std::ifstream file("data.json");
+    
+    if (!file.is_open()) {
+        throw(ErrorsType::JSON_FILE_CANT_OPEN);
+    }
 
-    std::string tmp;
+    std::string jsonString((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
-    CharType lastType = Token::CheckCharType(str[0]);
-    for (char ch : str)
+    Json::CharReaderBuilder builder;
+    Json::CharReader* reader = builder.newCharReader();
+
+    JSONCPP_STRING errors;
+
+    Json::Value root;
+    if (!reader->parse(jsonString.c_str(), jsonString.c_str() + jsonString.size(), &root, &errors)) {
+        delete reader;
+        throw(ErrorsType::JSON_PARCING_ERROR);
+    }
+
+    delete reader;
+
+    std::string mode = root["mode"].asString();
+    content.str = root["expression"].asString();
+    content.variables = root["variables"];
+
+    if (mode == "float")
+        Token::SetExpressionType(ExpressionType::FLOAT);
+    else if (mode == "matrix")
+        Token::SetExpressionType(ExpressionType::MATRIX);
+    else if (mode == "complex")
+        Token::SetExpressionType(ExpressionType::COMPLEX);
+    else
+        throw(ErrorsType::INVALID_JSON_MODE);
+
+    return content;
+}
+
+void AppCore::GetMode()
+{
+    std::string str = "0 - Console mode \n1 - Json mode \nSelect mode: ";
+    int mode;
+    bool flag = true;
+
+    while(flag)
     {
-        CharType curType = Token::CheckCharType(ch);
+        std::cout << str;
 
-        if (curType == CharType::UNDEFINE || curType == CharType::SPACE || (lastType == CharType::NUMBER || lastType == CharType::POINT) && 
-            (curType == CharType::NUMBER || curType == CharType::POINT) || lastType == curType)
+        std::string userInput;
+        std::getline(std::cin, userInput);
+
+        std::istringstream iss(userInput);
+        if (iss >> mode)
         {
-            tmp += ch;
+            switch (mode)
+            {
+            case 0:
+                programMode = ProgramMode::CONSOLE;
+                flag = false;
+                break;
+
+            case 1:
+                programMode = ProgramMode::JSON;
+                flag = false;
+                break;
+
+            default:
+                std::cout << "Invalid mode\n";
+                break;
+            }
         }
         else
-        {
-            parseVect.push_back(new Token(tmp));
-            tmp.clear();
-            tmp += ch;
-        }
-
-        lastType = curType;
+            std::cout << "Enter integer num\n";
     }
-
-    parseVect.push_back(new Token(tmp));
-
-    return parseVect;
 }
 
-void AppCore::RPN(std::vector<Token*>& vect)
+void AppCore::JsonMode()
 {
-    std::vector<Token*> tmpVect;
-    std::stack<Token*> stack;
+    JsonContents content = ReadFromJson();
+    
+    Calculator::DataProcessing(content.str);
 
-    for (auto token : vect)
-    {
-        switch (token->GetType())
-        {
-        case TokenType::NUMBER:
-        case TokenType::VARIABLE:
-            tmpVect.push_back(token);
-            break;
-
-        case TokenType::PARENTHESIS:
-            if (token->GetValue() == std::string("("))
-                stack.push(token);
-            else
-            {
-                while (!stack.empty() && stack.top()->GetType() != TokenType::PARENTHESIS)
-                {
-                    tmpVect.push_back(stack.top());
-                    stack.pop();
-                }
-                if(!stack.empty())
-                    stack.pop();
-            }
-            break;
-
-        case TokenType::OPERATION:
-            while (!stack.empty() && CheckPriority(stack.top()->GetValue()[0]) >= CheckPriority(token->GetValue()[0]) )
-            {
-                tmpVect.push_back(stack.top());
-                stack.pop();
-            }
-            stack.push(token);
-            break;
-
-        case TokenType::UNDEFINED:
-            break;
-        }
-    }
-
-    while (!stack.empty()) {
-        tmpVect.push_back(stack.top());
-        stack.pop();
-    }
-
-    vect.clear();
-    for (auto tmp : tmpVect)
-        vect.push_back(tmp);
+    system("pause");
 }
 
-
-bool AppCore::CheckValid(std::vector<Token*>& vect)
-{
-    int parenthesisOpen = 0; 
-    bool order = NUM_ORDER;
-     
-    for (auto token : vect)
-    {
-        switch (token->GetType())
-        {
-        case TokenType::PARENTHESIS:
-            if (token->GetValue() == std::string("("))
-                parenthesisOpen++;
-            else
-                parenthesisOpen--;
-            if (parenthesisOpen < 0)
-                return INVALID;
-            break;
-
-        case TokenType::NUMBER:
-        case TokenType::VARIABLE:
-            if (NUM_ORDER == order)
-                order = OPER_ORDER;
-            else
-                return INVALID;
-            break;
-
-        case TokenType::UNDEFINED:
-            break;
-
-        case TokenType::OPERATION:
-            if (OPER_ORDER == order)
-                order = NUM_ORDER;
-            else
-                return INVALID;
-            break;
-        }
-    }
-
-    if (order == NUM_ORDER)
-        return INVALID;
-
-    return VALID;
-}
-
-OperationPriority AppCore::CheckPriority(char c)
-{
-    switch (c)
-    {
-    case '+':
-        return OperationPriority::PLUS;
-
-    case '-':
-        return OperationPriority::MINUS;
-
-    case '*':
-        return OperationPriority::MULTIPLY;
-
-    case '/':
-        return OperationPriority::DIVIDE;
-
-    case '^':
-        return OperationPriority::DEGREE;
-
-    case '(':
-    case ')':
-        return OperationPriority::PARENTHESIS;
-    }
-}
-
-void AppCore::Calc(std::vector<Token*>& vect)
-{
-    std::stack<Token*> stack;
-    for (auto n : vect)
-    {
-        switch (n->GetType())
-        {
-        case TokenType::NUMBER:
-        case TokenType::VARIABLE:
-            stack.push(n);
-            break;
-        
-        case TokenType::OPERATION:
-            CalculatedValue* tmp = nullptr;
-            Token* var2 = stack.top();
-            stack.pop();
-
-            try
-            {
-                switch (n->GetValue()[0])
-                {
-                case '+':
-                    tmp = Calculator::add(stack.top()->GetCalcValue(), var2->GetCalcValue());
-                    break;
-
-                case '-':
-                    tmp = Calculator::substract(stack.top()->GetCalcValue(), var2->GetCalcValue());
-                    break;
-
-                case '*':
-                    tmp = Calculator::multiply(stack.top()->GetCalcValue(), var2->GetCalcValue());
-                    break;
-
-                case '/':
-                    tmp = Calculator::devide(stack.top()->GetCalcValue(), var2->GetCalcValue());
-                    break;
-
-                case '^':
-                    tmp = Calculator::power(stack.top()->GetCalcValue(), var2->GetCalcValue());
-                    break;
-                }
-            }
-            catch (const ErrorsType error)
-            {
-                std::cout << error << std::endl;
-                return;
-            }
-
-            stack.top()->SetCalcValue(tmp);
-            break;
-        }
-    }
-
-    std::cout << "Expression value:\n";
-    stack.top()->GetCalcValue()->ConsolePrint();
-}
-
-void AppCore::Start()
+void AppCore::ConsoleMode()
 {
     bool flag = true;
 
@@ -306,44 +180,32 @@ void AppCore::Start()
         std::cin.ignore();
 
         std::string str = GetString();
-
-        if(DEBUG)
-            std::cout << "You enter:" << str << std::endl;
-
-        std::vector<Token*> parseVect = Parse(str);
-
-        if(DEBUG)
-            for (auto n : parseVect)
-                n->ConsolePrint();
-
-        if (!CheckValid(parseVect))
-        {
-            std::cout << "Invalid mathematic expresion!" << std::endl;
-         
-            for (Token* token : parseVect)
-                delete token;
-
-            parseVect.clear();
-
-            continue;
-        }
-
-        RPN(parseVect);
         
-        if (DEBUG)
-        {
-            for (auto n : parseVect)
-                std::cout << n->GetValue() << " ";
-                
-            std::cout << std::endl;
-        }
-
-        Calc(parseVect);
-
-        for (Token* token : parseVect)
-            delete token;
-
-        parseVect.clear();
+        Calculator::DataProcessing(str);
     }
 }
-//3 + 2 - ( 10 ^ 4) / 5
+
+
+
+void AppCore::Start()
+{
+    GetMode();
+
+    if (programMode == ProgramMode::JSON)
+    {
+        try{
+            JsonMode();
+        }
+        catch (const ErrorsType error)
+        {
+            programMode == ProgramMode::CONSOLE;
+            std::cout << error;
+            std::cout << "Try console mode\n";
+        }
+    }
+
+    if (programMode == ProgramMode::CONSOLE)
+    {
+        ConsoleMode();
+    }
+}
