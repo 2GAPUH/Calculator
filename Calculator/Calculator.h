@@ -8,7 +8,6 @@ class Token;
 class Calculator
 {
 private:
-	static std::vector<Token*> Parse(std::string& str);
 	static bool CheckValid(std::vector<Token*> vect);
 	static void RPN(std::vector<Token*>& vect);
 	static OperationPriority CheckPriority(char c);
@@ -25,6 +24,6 @@ public:
 
 	static CalculatedValue* power(CalculatedValue* a, CalculatedValue* b);
 
-	static void DataProcessing(std::string& str);
+	static void DataProcessing(std::vector<Token*>& parseVect);
 };
 

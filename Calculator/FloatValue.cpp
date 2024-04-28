@@ -27,6 +27,20 @@ FloatValue::FloatValue(std::string str)
     }
 }
 
+FloatValue::FloatValue(std::string str, JsonContent& content)
+{
+    for (auto cont : content.variables)
+    {
+        if (cont.getMemberNames()[0] == str)
+        {
+            std::string var = cont[cont.getMemberNames()[0]].asString();
+            value = std::stof(var);
+            return;
+        }
+    }
+    throw(ErrorsType::UNDEFINED_VARIABLE);
+}
+
 FloatValue::FloatValue(Token token)
 {
     value = stof(token.GetValue());
@@ -90,5 +104,5 @@ float FloatValue::GetValue()
 
 void FloatValue::ConsolePrint() const
 {
-    std::cout << value;
+    std::cout << value << std::endl;
 }

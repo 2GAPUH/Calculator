@@ -15,7 +15,7 @@ enum class OperationPriority { PLUS = 0, MINUS = 0, MULTIPLY = 1, DIVIDE = 1, DE
 
 enum class ErrorsType {ZERO_DEVIDE, POWER_OVERFLOW, INCOMPATIBLE_MATRIX_SIZES, MATRIX_DIVIDE_MATRIX, 
     MATRIX_POWER_MATRIX, FLOAT_POWER_UNDEFINE, TRASH_INPUT, INVALID_TYPE, COMPLEX_POWER_COMPLEX, JSON_FILE_CANT_OPEN,
-    JSON_PARCING_ERROR, INVALID_JSON_MODE};
+    JSON_PARCING_ERROR, INVALID_JSON_MODE, EMPTY_STRING, UNDEFINED_VARIABLE};
 
 enum class ProgramMode { CONSOLE, JSON};
 
@@ -64,6 +64,12 @@ static std::ostream& operator<<(std::ostream& os, ErrorsType error)
         break;
     case ErrorsType::INVALID_JSON_MODE:
         os << "Json invalid expression mode";
+        break;
+    case ErrorsType::EMPTY_STRING:
+        os << "Empty string";
+        break;
+    case ErrorsType::UNDEFINED_VARIABLE:
+        os << "Undefined variable";
         break;
 
 

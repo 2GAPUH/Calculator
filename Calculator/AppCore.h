@@ -18,6 +18,8 @@ public:
 #pragma endregion
 
 private:
+    std::vector<Token*> Parse(std::string str);
+    std::vector<Token*> Parse(JsonContent& content);
     std::string GetString();
     void GetExpressionType();
     JsonContent ReadFromJson(std::string path = "data.json");

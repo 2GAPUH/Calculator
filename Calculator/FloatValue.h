@@ -10,6 +10,7 @@ private:
 
 public:
     FloatValue(std::string str);
+    FloatValue(std::string str, JsonContent& content);
     FloatValue(Token  token);
     FloatValue(float i = 0);
 

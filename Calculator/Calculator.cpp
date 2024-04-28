@@ -2,39 +2,6 @@
 #include "CalculatedValue.h"
 #include "Token.h"
 
-std::vector<Token*> Calculator::Parse(std::string& str)
-{
-    std::vector<Token*> parseVect;
-
-    if (str.empty())
-        return parseVect;
-
-    std::string tmp;
-
-    CharType lastType = Token::CheckCharType(str[0]);
-    for (char ch : str)
-    {
-        CharType curType = Token::CheckCharType(ch);
-
-        if (curType == CharType::UNDEFINE || curType == CharType::SPACE || (lastType == CharType::NUMBER || lastType == CharType::POINT) &&
-            (curType == CharType::NUMBER || curType == CharType::POINT) || lastType == curType)
-        {
-            tmp += ch;
-        }
-        else
-        {
-            parseVect.push_back(new Token(tmp));
-            tmp.clear();
-            tmp += ch;
-        }
-
-        lastType = curType;
-    }
-
-    parseVect.push_back(new Token(tmp));
-
-    return parseVect;
-}
 
 
 
@@ -292,10 +259,8 @@ CalculatedValue* Calculator::power(CalculatedValue* a, CalculatedValue* b)
     }
 }
 
-void Calculator::DataProcessing(std::string& str)
+void Calculator::DataProcessing(std::vector<Token*>& parseVect)
 {
-    std::vector<Token*> parseVect = Parse(str);
-
     if (DEBUG)
         for (auto n : parseVect)
             n->ConsolePrint();

@@ -103,6 +103,31 @@ void Token::SetValue()
     }
 }
 
+void Token::SetValue(JsonContent& content)
+{
+    if (type == TokenType::NUMBER)
+    {
+        calcValue = new FloatValue(std::stof(token));
+        return;
+    }
+
+    if (type == TokenType::VARIABLE)
+        switch (expressionType)
+        {
+        case ExpressionType::FLOAT:
+            calcValue = new FloatValue(token, content);
+            break;
+
+        case ExpressionType::MATRIX:
+            calcValue = new MatrixValue(token);
+            break;
+
+        case ExpressionType::COMPLEX:
+            calcValue = new ComplexValue(token);
+            break;
+        }
+}
+
 void Token::ConsolePrint()
 {
     std::cout << "Token = '" << token << "'; Type = '" << type << "';" << std::endl;
@@ -166,6 +191,19 @@ Token::Token(std::string token)
 
 	SetToken(token);
     SetValue();
+}
+
+Token::Token(std::string token, JsonContent& content)
+{
+    if (token.empty())
+    {
+        this->token = "";
+        type = TokenType::UNDEFINED;
+        return;
+    }
+
+    SetToken(token);
+    SetValue(content);
 }
 
 Token::~Token()

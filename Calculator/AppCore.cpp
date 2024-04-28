@@ -26,6 +26,74 @@ void AppCore::DestroyInstance()
     instance = nullptr;
 }
 
+std::vector<Token*> AppCore::Parse(std::string str)
+{
+    std::vector<Token*> parseVect;
+
+    if (str.empty())
+        return parseVect;
+
+    std::string tmp;
+
+    CharType lastType = Token::CheckCharType(str[0]);
+    for (char ch : str)
+    {
+        CharType curType = Token::CheckCharType(ch);
+
+        if (curType == CharType::UNDEFINE || curType == CharType::SPACE || (lastType == CharType::NUMBER || lastType == CharType::POINT) &&
+            (curType == CharType::NUMBER || curType == CharType::POINT) || lastType == curType)
+        {
+            tmp += ch;
+        }
+        else
+        {
+            parseVect.push_back(new Token(tmp));
+            tmp.clear();
+            tmp += ch;
+        }
+
+        lastType = curType;
+    }
+
+    parseVect.push_back(new Token(tmp));
+
+    return parseVect;
+}
+
+std::vector<Token*> AppCore::Parse(JsonContent& content)
+{
+    std::vector<Token*> parseVect;
+
+    if (content.str.empty())
+        throw(ErrorsType::EMPTY_STRING);
+
+    std::string tmp;
+
+    CharType lastType = Token::CheckCharType(content.str[0]);
+    for (char ch : content.str)
+    {
+        CharType curType = Token::CheckCharType(ch);
+
+        if (curType == CharType::UNDEFINE || curType == CharType::SPACE || (lastType == CharType::NUMBER || lastType == CharType::POINT) &&
+            (curType == CharType::NUMBER || curType == CharType::POINT) || lastType == curType)
+        {
+            tmp += ch;
+        }
+        else
+        {
+            parseVect.push_back(new Token(tmp, content));
+            tmp.clear();
+            tmp += ch;
+        }
+
+        lastType = curType;
+    }
+
+    parseVect.push_back(new Token(tmp));
+
+    return parseVect;
+}
+
 std::string AppCore::GetString()
 {
     std::string str;
@@ -164,7 +232,9 @@ void AppCore::JsonMode()
 {
     JsonContent content = ReadFromJson();
 
-    Calculator::DataProcessing(content.str);
+    std::vector<Token*> parseVect = Parse(content);
+
+    Calculator::DataProcessing(parseVect);
 
     system("pause");
 }
@@ -180,12 +250,12 @@ void AppCore::ConsoleMode()
         std::cin.ignore();
 
         std::string str = GetString();
-        
-        Calculator::DataProcessing(str);
+
+        std::vector<Token*> parseVect = Parse(str);
+
+        Calculator::DataProcessing(parseVect);
     }
 }
-
-
 
 void AppCore::Start()
 {
@@ -198,9 +268,15 @@ void AppCore::Start()
         }
         catch (const ErrorsType error)
         {
-            programMode == ProgramMode::CONSOLE;
             std::cout << error;
+            programMode = ProgramMode::CONSOLE;
             std::cout << "Try console mode\n";
+        }
+        catch (const std::invalid_argument& e)
+        {
+            programMode = ProgramMode::CONSOLE;
+            std::cout << "Try console mode\n";
+            std::cerr << "Error converting string to floating point number: " << e.what() << std::endl;
         }
     }
 

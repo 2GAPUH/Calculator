@@ -19,7 +19,7 @@ ExpressionType ComplexValue::GetType() const
 
 void ComplexValue::ConsolePrint() const
 {
-    std::cout << "real: " << value.real << "  imag: " << value.imag << "i";
+    std::cout << "real: " << value.real << "  imag: " << value.imag << "i" << std::endl;
 }
 
 Complex ComplexValue::GetValue()

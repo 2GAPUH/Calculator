@@ -10,11 +10,13 @@ private:
 	TokenType type;
 	void SetToken(const std::string& str);
 	void SetValue();
+	void SetValue(JsonContent& content);
 	CalculatedValue* calcValue = nullptr;
 
 public:
 	static CharType CheckCharType(char c);
 	Token(std::string token);
+	Token(std::string token, JsonContent& content);
 	~Token();
 	TokenType GetType();
 	void ConsolePrint();
