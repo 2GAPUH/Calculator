@@ -15,7 +15,8 @@ enum class OperationPriority { PLUS = 0, MINUS = 0, MULTIPLY = 1, DIVIDE = 1, DE
 
 enum class ErrorsType {ZERO_DEVIDE, POWER_OVERFLOW, INCOMPATIBLE_MATRIX_SIZES, MATRIX_DIVIDE_MATRIX, 
     MATRIX_POWER_MATRIX, FLOAT_POWER_UNDEFINE, TRASH_INPUT, INVALID_TYPE, COMPLEX_POWER_COMPLEX, JSON_FILE_CANT_OPEN,
-    JSON_PARCING_ERROR, INVALID_JSON_MODE, EMPTY_STRING, UNDEFINED_VARIABLE};
+    JSON_PARCING_ERROR, INVALID_JSON_MODE, EMPTY_STRING, UNDEFINED_VARIABLE, INVALID_MATRIX_SIZE, FIELD_ABSENCE, MATRIX_INIT_ERROR,
+    UNNAMED_FIELD};
 
 enum class ProgramMode { CONSOLE, JSON};
 
@@ -70,6 +71,18 @@ static std::ostream& operator<<(std::ostream& os, ErrorsType error)
         break;
     case ErrorsType::UNDEFINED_VARIABLE:
         os << "Undefined variable";
+        break;
+    case ErrorsType::INVALID_MATRIX_SIZE:
+        os << "Invalid matrix size";
+        break;
+    case ErrorsType::FIELD_ABSENCE:
+        os << "Field absence";
+        break;
+    case ErrorsType::MATRIX_INIT_ERROR:
+        os << "Matrix init error";
+        break;
+    case ErrorsType::UNNAMED_FIELD:
+        os << "Field name empty";
         break;
 
 

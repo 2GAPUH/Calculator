@@ -119,11 +119,11 @@ void Token::SetValue(JsonContent& content)
             break;
 
         case ExpressionType::MATRIX:
-            calcValue = new MatrixValue(token);
+            calcValue = new MatrixValue(token, content);
             break;
 
         case ExpressionType::COMPLEX:
-            calcValue = new ComplexValue(token);
+            calcValue = new ComplexValue(token, content);
             break;
         }
 }

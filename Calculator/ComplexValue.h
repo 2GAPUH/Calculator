@@ -7,6 +7,7 @@ class ComplexValue : public CalculatedValue
 
 public:
     ComplexValue(std::string str);
+    ComplexValue(std::string str, JsonContent& content);
     ComplexValue(Complex value);
     ~ComplexValue();
 

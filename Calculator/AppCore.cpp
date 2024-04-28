@@ -276,7 +276,7 @@ void AppCore::Start()
         {
             programMode = ProgramMode::CONSOLE;
             std::cout << "Try console mode\n";
-            std::cerr << "Error converting string to floating point number: " << e.what() << std::endl;
+            std::cerr << "Error converting string to number: " << e.what() << std::endl;
         }
     }
 

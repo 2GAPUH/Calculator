@@ -72,6 +72,53 @@ MatrixValue::MatrixValue(std::string str)
     }
 }
 
+MatrixValue::MatrixValue(std::string str, JsonContent& content)
+{
+    for (auto cont : content.variables)
+    {
+        if (!cont.isMember("name"))
+            throw(ErrorsType::UNNAMED_FIELD);
+        if (cont["name"].asString() == str)
+        {
+            if (!cont.isMember("rows") || !cont.isMember("columns"))
+                throw(ErrorsType::FIELD_ABSENCE);
+
+            rows = std::stof(cont["rows"].asString());
+            columns = std::stof(cont["columns"].asString());
+
+            if (rows < 1 || rows > 10 || columns > 10 || columns < 1)
+                throw(ErrorsType::INVALID_MATRIX_SIZE);
+
+            if (!cont.isMember("num"))
+                throw(ErrorsType::FIELD_ABSENCE);
+ 
+            value = new float* [rows];
+            for (int i = 0; i < rows; i++)
+                value[i] = new float[columns];
+
+            Json::Value num = cont["num"];
+            int i = 0, j = 0;
+
+            for (auto tmp : num)
+            {
+                value[i][j] = tmp.asFloat();
+                
+                j++;
+                if (j >= columns)
+                {
+                    j = 0;
+                    i++;
+                }
+                if (i >= rows)
+                    return;
+            }
+
+            throw(ErrorsType::MATRIX_INIT_ERROR);
+        }
+    }
+    throw(ErrorsType::UNDEFINED_VARIABLE);
+}
+
 MatrixValue::~MatrixValue()
 {
     if (value != nullptr)

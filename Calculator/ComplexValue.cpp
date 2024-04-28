@@ -76,6 +76,25 @@ ComplexValue::ComplexValue(std::string str)
     }
 }
 
+ComplexValue::ComplexValue(std::string str, JsonContent& content)
+{
+    for (auto cont : content.variables)
+    {
+        if (!cont.isMember("name"))
+            throw(ErrorsType::UNNAMED_FIELD);
+        if (cont["name"].asString() == str)
+        {
+            if (!cont.isMember("real") || !cont.isMember("imag"))
+                throw(ErrorsType::FIELD_ABSENCE);
+
+            value.real = std::stof(cont["real"].asString());
+            value.imag = std::stof(cont["imag"].asString());
+            return;
+        }
+    }
+    throw(ErrorsType::UNDEFINED_VARIABLE);
+}
+
 ComplexValue::ComplexValue(Complex value)
 {
     this->value = value;
